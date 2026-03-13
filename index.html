@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMDD Journal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">&#9790;</span>
+        <span class="logo-text">PMDD Journal</span>
+      </div>
+      <nav class="nav-tabs">
+        <button class="nav-btn active" data-page="today">Today</button>
+        <button class="nav-btn" data-page="calendar">Calendar</button>
+        <button class="nav-btn" data-page="insights">Insights</button>
+        <button class="nav-btn" data-page="cycle">Cycle</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="app-main">
+
+    <!-- ===== PAGE: TODAY ===== -->
+    <section id="page-today" class="page active">
+      <div class="page-header">
+        <h1 class="page-title">Today's Check-in</h1>
+        <p class="page-date" id="today-date"></p>
+      </div>
+
+      <div class="card cycle-banner" id="cycle-banner" style="display:none;">
+        <span id="cycle-banner-text"></span>
+      </div>
+
+      <form id="entry-form" class="entry-form">
+
+        <!-- MOOD -->
+        <div class="card">
+          <h2 class="card-title">How are you feeling overall?</h2>
+          <div class="mood-scale">
+            <span class="scale-label">Difficult</span>
+            <div class="mood-buttons" id="mood-buttons">
+              <button type="button" class="mood-btn" data-value="1">1</button>
+              <button type="button" class="mood-btn" data-value="2">2</button>
+              <button type="button" class="mood-btn" data-value="3">3</button>
+              <button type="button" class="mood-btn" data-value="4">4</button>
+              <button type="button" class="mood-btn" data-value="5">5</button>
+              <button type="button" class="mood-btn" data-value="6">6</button>
+              <button type="button" class="mood-btn" data-value="7">7</button>
+              <button type="button" class="mood-btn" data-value="8">8</button>
+              <button type="button" class="mood-btn" data-value="9">9</button>
+              <button type="button" class="mood-btn" data-value="10">10</button>
+            </div>
+            <span class="scale-label">Great</span>
+          </div>
+          <p class="mood-desc" id="mood-desc">Select a number above</p>
+          <input type="hidden" id="mood-value" name="mood" value="" />
+        </div>
+
+        <!-- ENERGY -->
+        <div class="card">
+          <h2 class="card-title">Energy level</h2>
+          <div class="slider-row">
+            <span class="scale-label">Exhausted</span>
+            <input type="range" id="energy-slider" min="1" max="10" value="5" class="slider" />
+            <span class="scale-label">Energized</span>
+          </div>
+          <p class="slider-val">Energy: <strong id="energy-display">5</strong> / 10</p>
+        </div>
+
+        <!-- EMOTIONAL SYMPTOMS -->
+        <div class="card">
+          <h2 class="card-title">Emotional symptoms</h2>
+          <p class="card-subtitle">Select all that apply</p>
+          <div class="symptom-grid" id="emotional-symptoms">
+            <label class="symptom-chip"><input type="checkbox" value="irritability" /> Irritability</label>
+            <label class="symptom-chip"><input type="checkbox" value="anxiety" /> Anxiety</label>
+            <label class="symptom-chip"><input type="checkbox" value="depression" /> Depression</label>
+            <label class="symptom-chip"><input type="checkbox" value="mood_swings" /> Mood Swings</label>
+            <label class="symptom-chip"><input type="checkbox" value="crying_spells" /> Crying Spells</label>
+            <label class="symptom-chip"><input type="checkbox" value="brain_fog" /> Brain Fog</label>
+            <label class="symptom-chip"><input type="checkbox" value="overwhelm" /> Overwhelm</label>
+            <label class="symptom-chip"><input type="checkbox" value="social_withdrawal" /> Social Withdrawal</label>
+            <label class="symptom-chip"><input type="checkbox" value="hopelessness" /> Hopelessness</label>
+            <label class="symptom-chip"><input type="checkbox" value="anger_outbursts" /> Anger Outbursts</label>
+            <label class="symptom-chip"><input type="checkbox" value="low_self_esteem" /> Low Self-Esteem</label>
+            <label class="symptom-chip"><input type="checkbox" value="sensitivity" /> Sensitivity</label>
+          </div>
+        </div>
+
+        <!-- PHYSICAL SYMPTOMS -->
+        <div class="card">
+          <h2 class="card-title">Physical symptoms</h2>
+          <p class="card-subtitle">Select all that apply</p>
+          <div class="symptom-grid" id="physical-symptoms">
+            <label class="symptom-chip"><input type="checkbox" value="bloating" /> Bloating</label>
+            <label class="symptom-chip"><input type="checkbox" value="cramps" /> Cramps</label>
+            <label class="symptom-chip"><input type="checkbox" value="headache" /> Headache</label>
+            <label class="symptom-chip"><input type="checkbox" value="fatigue" /> Fatigue</label>
+            <label class="symptom-chip"><input type="checkbox" value="breast_tenderness" /> Breast Tenderness</label>
+            <label class="symptom-chip"><input type="checkbox" value="acne" /> Acne</label>
+            <label class="symptom-chip"><input type="checkbox" value="back_pain" /> Back Pain</label>
+            <label class="symptom-chip"><input type="checkbox" value="joint_pain" /> Joint Pain</label>
+            <label class="symptom-chip"><input type="checkbox" value="sleep_issues" /> Sleep Issues</label>
+            <label class="symptom-chip"><input type="checkbox" value="appetite_changes" /> Appetite Changes</label>
+            <label class="symptom-chip"><input type="checkbox" value="nausea" /> Nausea</label>
+            <label class="symptom-chip"><input type="checkbox" value="hot_flashes" /> Hot Flashes</label>
+          </div>
+        </div>
+
+        <!-- PERIOD -->
+        <div class="card">
+          <h2 class="card-title">Period tracking</h2>
+          <label class="toggle-row">
+            <span>Is today a period day?</span>
+            <input type="checkbox" id="is-period" class="toggle-input" />
+            <span class="toggle-switch"></span>
+          </label>
+          <div id="flow-row" class="flow-row hidden">
+            <p class="card-subtitle">Flow intensity</p>
+            <div class="flow-options">
+              <label class="flow-chip"><input type="radio" name="flow" value="spotting" /> Spotting</label>
+              <label class="flow-chip"><input type="radio" name="flow" value="light" /> Light</label>
+              <label class="flow-chip"><input type="radio" name="flow" value="medium" /> Medium</label>
+              <label class="flow-chip"><input type="radio" name="flow" value="heavy" /> Heavy</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- REFLECTION -->
+        <div class="card">
+          <h2 class="card-title">Journal reflection</h2>
+          <p class="card-subtitle">How is your day going? Any thoughts or feelings to capture?</p>
+          <textarea id="reflection-text" class="reflection-textarea" placeholder="Write freely here..."></textarea>
+        </div>
+
+        <!-- GRATITUDE -->
+        <div class="card">
+          <h2 class="card-title">One thing I'm grateful for</h2>
+          <input type="text" id="gratitude-text" class="text-input" placeholder="Something small counts..." />
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="form-footer">
+          <button type="submit" class="btn-primary" id="save-btn">Save Today's Entry</button>
+          <p class="save-status" id="save-status"></p>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ===== PAGE: CALENDAR ===== -->
+    <section id="page-calendar" class="page">
+      <div class="page-header">
+        <h1 class="page-title">History</h1>
+        <p class="page-subtitle">Your logged days at a glance</p>
+      </div>
+
+      <div class="card calendar-nav-card">
+        <div class="calendar-nav">
+          <button class="cal-nav-btn" id="cal-prev">&lsaquo;</button>
+          <span class="cal-month-label" id="cal-month-label"></span>
+          <button class="cal-nav-btn" id="cal-next">&rsaquo;</button>
+        </div>
+        <div class="calendar-legend">
+          <span class="legend-item"><span class="legend-dot dot-great"></span> Good mood (7-10)</span>
+          <span class="legend-item"><span class="legend-dot dot-ok"></span> Neutral (4-6)</span>
+          <span class="legend-item"><span class="legend-dot dot-hard"></span> Hard day (1-3)</span>
+          <span class="legend-item"><span class="legend-dot dot-period"></span> Period</span>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+
+      <!-- Entry Detail Modal -->
+      <div class="entry-detail card hidden" id="entry-detail">
+        <div class="detail-header">
+          <h3 id="detail-date-title"></h3>
+          <button class="close-btn" id="close-detail">&times;</button>
+        </div>
+        <div id="detail-content"></div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: INSIGHTS ===== -->
+    <section id="page-insights" class="page">
+      <div class="page-header">
+        <h1 class="page-title">Insights</h1>
+        <p class="page-subtitle">Patterns from your journal</p>
+      </div>
+
+      <div class="insights-grid">
+        <div class="card stat-card">
+          <p class="stat-label">Entries logged</p>
+          <p class="stat-value" id="stat-entries">0</p>
+        </div>
+        <div class="card stat-card">
+          <p class="stat-label">Avg. mood</p>
+          <p class="stat-value" id="stat-mood">--</p>
+        </div>
+        <div class="card stat-card">
+          <p class="stat-label">Current streak</p>
+          <p class="stat-value" id="stat-streak">0 days</p>
+        </div>
+        <div class="card stat-card">
+          <p class="stat-label">Period days logged</p>
+          <p class="stat-value" id="stat-period">0</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Mood over time (last 30 days)</h2>
+        <div class="chart-wrap">
+          <canvas id="mood-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Most frequent symptoms</h2>
+        <div class="chart-wrap">
+          <canvas id="symptom-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Energy over time (last 30 days)</h2>
+        <div class="chart-wrap">
+          <canvas id="energy-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: CYCLE ===== -->
+    <section id="page-cycle" class="page">
+      <div class="page-header">
+        <h1 class="page-title">Cycle Tracker</h1>
+        <p class="page-subtitle">Log and review your menstrual cycles</p>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Log a cycle</h2>
+        <div class="cycle-form">
+          <div class="field-group">
+            <label class="field-label" for="cycle-start">Period start date</label>
+            <input type="date" id="cycle-start" class="date-input" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cycle-end">Period end date</label>
+            <input type="date" id="cycle-end" class="date-input" />
+          </div>
+          <button class="btn-primary" id="log-cycle-btn">Log Cycle</button>
+          <p class="save-status" id="cycle-status"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Cycle history</h2>
+        <div id="cycle-list" class="cycle-list">
+          <p class="empty-state">No cycles logged yet.</p>
+        </div>
+      </div>
+
+      <div class="card" id="cycle-stats-card" style="display:none;">
+        <h2 class="card-title">Cycle stats</h2>
+        <div class="cycle-stats-grid" id="cycle-stats-grid"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Luteal phase guide</h2>
+        <p class="info-text">
+          PMDD symptoms typically emerge during the <strong>luteal phase</strong> — the 1–2 weeks before your period
+          starts (roughly days 14–28 of a 28-day cycle). Tracking your cycle helps identify when you may be most
+          vulnerable to symptoms.
+        </p>
+        <div class="phase-timeline">
+          <div class="phase menstrual"><span>Menstrual</span><small>Days 1-5</small></div>
+          <div class="phase follicular"><span>Follicular</span><small>Days 6-13</small></div>
+          <div class="phase ovulation"><span>Ovulation</span><small>Day 14</small></div>
+          <div class="phase luteal highlight-phase"><span>Luteal</span><small>Days 15-28</small></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script src="charts.js"></script>
+</body>
+</html>
